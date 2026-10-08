@@ -30,7 +30,7 @@ export function ContextPanel() {
       </button>
 
       <div
-        className={`space-y-4 border-t border-border px-4 py-4 ${
+        className={`space-y-4 border-t border-border px-4 py-4 max-h-[55dvh] overflow-y-auto lg:max-h-none lg:overflow-visible ${
           open ? "block" : "hidden lg:block"
         }`}
       >
