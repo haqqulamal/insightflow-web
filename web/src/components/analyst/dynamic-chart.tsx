@@ -9,7 +9,7 @@ export function DynamicChart({
   rows,
   title,
 }: {
-  rows: (string | number)[][];
+  rows: (string | number | null)[][];
   title: string;
 }) {
   const option = {
