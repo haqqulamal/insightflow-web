@@ -21,7 +21,7 @@ export function ContextPanel() {
         <select
           value={dataset}
           onChange={(e) => setDataset(e.target.value)}
-          className="w-full rounded-md border border-border px-2 py-1.5 text-sm bg-white"
+          className="w-full appearance-none rounded-md border border-border bg-white bg-[url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%2364748B%22 stroke-width=%222%22><path d=%22m6 9 6 6 6-6%22/></svg>')] bg-no-repeat bg-[right_0.6rem_center] px-2 py-1.5 text-sm pr-8 focus:outline-none focus:ring-2 focus:ring-primary/40"
         >
           <option>Penjualan Sep 2026 (v3)</option>
           <option>Penjualan Agu 2026 (v2)</option>
@@ -33,7 +33,7 @@ export function ContextPanel() {
         <input
           value={metrik}
           onChange={(e) => setMetrik(e.target.value)}
-          className="w-full rounded-md border border-border px-2 py-1.5 text-sm"
+          className="w-full rounded-md border border-border bg-white px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
         />
       </label>
 
@@ -42,7 +42,7 @@ export function ContextPanel() {
         <input
           value={periode}
           onChange={(e) => setPeriode(e.target.value)}
-          className="w-full rounded-md border border-border px-2 py-1.5 text-sm"
+          className="w-full rounded-md border border-border bg-white px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
         />
       </label>
 
@@ -51,7 +51,7 @@ export function ContextPanel() {
         <input
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          className="w-full rounded-md border border-border px-2 py-1.5 text-sm"
+          className="w-full rounded-md border border-border bg-white px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
         />
       </label>
 
