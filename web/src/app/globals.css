@@ -31,6 +31,8 @@
   --color-info: var(--info);
   --color-ai: var(--ai);
   --color-navy: var(--navy);
+  --color-slate-ink: var(--slate-ink);
+  --color-surface: var(--surface);
   --color-destructive: var(--destructive);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
@@ -78,6 +80,7 @@
   --ai: #6366F1;
   --navy: #0F172A;
   --slate-ink: #334155;
+  --surface: #F8FAFC;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
