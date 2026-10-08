@@ -1,0 +1,22 @@
+[
+  {
+    "id": "ds_01",
+    "nama": "shopee_sep2026.xlsx",
+    "sumber": "Shopee",
+    "baris": 124532,
+    "kolom": 18,
+    "kualitas": 94,
+    "status": "READY",
+    "diperbarui": "2026-10-07T00:00:00+07:00"
+  },
+  {
+    "id": "ds_02",
+    "nama": "tokopedia_q3.csv",
+    "sumber": "Tokopedia",
+    "baris": 48210,
+    "kolom": 12,
+    "kualitas": 88,
+    "status": "READY",
+    "diperbarui": "2026-10-05T00:00:00+07:00"
+  }
+]
