@@ -19,12 +19,13 @@ export function AppHeader({ onMenuClick }: { onMenuClick?: () => void }) {
           className="flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
         />
       </div>
-      <div className="flex-1 sm:hidden" />
-      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-        <Gauge className="size-4" />
-        <span className="hidden sm:inline">Pemakaian</span>
+      <div className="ml-auto flex items-center gap-4">
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <Gauge className="size-4" />
+          <span className="hidden sm:inline">Pemakaian</span>
+        </div>
+        <UserCircle className="size-6 text-slate-ink" />
       </div>
-      <UserCircle className="size-6 text-slate-ink" />
     </header>
   );
 }
