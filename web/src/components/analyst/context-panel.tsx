@@ -16,17 +16,25 @@ export function ContextPanel() {
         Konteks Data
       </div>
 
-      <label className="block space-y-1">
+      <div className="space-y-1">
         <span className="text-xs text-muted-foreground">Dataset</span>
-        <select
-          value={dataset}
-          onChange={(e) => setDataset(e.target.value)}
-          className="w-full appearance-none rounded-md border border-border bg-white bg-[url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%2364748B%22 stroke-width=%222%22><path d=%22m6 9 6 6 6-6%22/></svg>')] bg-no-repeat bg-[right_0.6rem_center] px-2 py-1.5 text-sm pr-8 focus:outline-none focus:ring-2 focus:ring-primary/40"
-        >
-          <option>Penjualan Sep 2026 (v3)</option>
-          <option>Penjualan Agu 2026 (v2)</option>
-        </select>
-      </label>
+        <div className="grid grid-cols-1 gap-1.5">
+          {["Penjualan Sep 2026 (v3)", "Penjualan Agu 2026 (v2)"].map((d) => (
+            <button
+              key={d}
+              type="button"
+              onClick={() => setDataset(d)}
+              className={`rounded-md border px-2 py-1.5 text-sm text-left transition-colors ${
+                dataset === d
+                  ? "border-primary bg-primary/5 text-primary font-medium"
+                  : "border-border bg-white text-slate-ink hover:bg-accent"
+              }`}
+            >
+              {d}
+            </button>
+          ))}
+        </div>
+      </div>
 
       <label className="block space-y-1">
         <span className="text-xs text-muted-foreground">Metrik aktif</span>
