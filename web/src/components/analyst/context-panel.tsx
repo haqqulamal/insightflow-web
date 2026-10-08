@@ -118,8 +118,8 @@ export function ContextSheet({
 }) {
   return (
     <div
-      className={`fixed inset-0 z-50 lg:hidden ${
-        open ? "" : "pointer-events-none"
+      className={`fixed inset-0 z-50 transition-[visibility] duration-300 lg:hidden ${
+        open ? "" : "invisible pointer-events-none"
       }`}
       aria-hidden={!open}
     >

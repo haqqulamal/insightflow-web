@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getAnalystRun, type K1Response } from "@/lib/api-client";
 import { ResponseView } from "@/components/analyst/response-view";
 import {
@@ -10,12 +10,13 @@ import {
 } from "@/components/analyst/context-panel";
 import { StateBlock } from "@/components/ui/state-block";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useKuotaHarian, KUOTA_HARIAN } from "@/hooks/use-kuota-harian";
+import { DEV } from "@/lib/dev";
 import { SendHorizonal, SlidersHorizontal } from "lucide-react";
 
-const KUOTA_HARIAN = 10;
-const KUOTA_KEY = "insightflow-kuota-analis";
-const SIMULASI = ["normal", "error", "kuota"] as const;
-type Simulasi = (typeof SIMULASI)[number];
+type Simulasi = "normal" | "error" | "kuota";
+
+const MAX_RIWAYAT = 20;
 
 const SARAN_PERTANYAAN = [
   "Kenapa omzet bulan ini turun?",
@@ -24,35 +25,14 @@ const SARAN_PERTANYAAN = [
   "Beri rekomendasi untuk naikkan penjualan",
 ];
 
-function hariIni() {
-  return new Date().toISOString().slice(0, 10);
-}
-
-function bacaKuota(): { tanggal: string; terpakai: number } {
-  try {
-    const raw = localStorage.getItem(KUOTA_KEY);
-    if (raw) {
-      const q = JSON.parse(raw);
-      if (q.tanggal === hariIni()) return q;
-    }
-  } catch {
-    // abaikan
-  }
-  return { tanggal: hariIni(), terpakai: 0 };
-}
-
-function tulisKuota(terpakai: number) {
-  localStorage.setItem(KUOTA_KEY, JSON.stringify({ tanggal: hariIni(), terpakai }));
-}
-
 type Status = "idle" | "loading" | "error" | "quota";
 
 export default function AnalisPage() {
   const [pertanyaan, setPertanyaan] = useState("");
   const [status, setStatus] = useState<Status>("idle");
-  const [sisaKuota, setSisaKuota] = useState<number | null>(null);
   const [simulasi, setSimulasi] = useState<Simulasi>("normal");
   const [sheetOpen, setSheetOpen] = useState(false);
+  const kuota = useKuotaHarian();
   const [konteks, setKonteks] = useState<Konteks>({
     dataset: "Penjualan Sep 2026 (v3)",
     metrik: "omzet_bersih",
@@ -63,10 +43,6 @@ export default function AnalisPage() {
     { tanya: string; jawab: K1Response }[]
   >([]);
 
-  useEffect(() => {
-    setSisaKuota(KUOTA_HARIAN - bacaKuota().terpakai);
-  }, []);
-
   async function kirim() {
     const t = pertanyaan.trim();
     if (!t || status === "loading") return;
@@ -76,22 +52,20 @@ export default function AnalisPage() {
       return;
     }
 
-    const kuota = bacaKuota();
-    if (kuota.terpakai >= KUOTA_HARIAN) {
+    if (!kuota.pakai()) {
       setStatus("quota");
       return;
     }
-    tulisKuota(kuota.terpakai + 1);
-    setSisaKuota(KUOTA_HARIAN - kuota.terpakai - 1);
 
     setPertanyaan("");
     setStatus("loading");
     try {
       if (simulasi === "error") throw new Error("Simulasi error");
       const jawab = await getAnalystRun();
-      setRiwayat((r) => [...r, { tanya: t, jawab: jawab }]);
+      setRiwayat((r) => [...r.slice(-(MAX_RIWAYAT - 1)), { tanya: t, jawab }]);
       setStatus("idle");
     } catch {
+      kuota.refund(); // kuota tidak boleh hangus saat request gagal
       setPertanyaan(t); // kembalikan pertanyaan agar bisa dikirim ulang
       setStatus("error");
     }
@@ -111,7 +85,7 @@ export default function AnalisPage() {
             <SlidersHorizontal className="size-3.5 shrink-0 text-primary" />
             <span className="truncate">{konteks.dataset}</span>
           </button>
-          {process.env.NODE_ENV === "development" && (
+          {DEV && (
             <select
               value={simulasi}
               onChange={(e) => {
@@ -205,11 +179,10 @@ export default function AnalisPage() {
               title="Kuota harian habis"
               description={`Anda sudah menggunakan ${KUOTA_HARIAN} pertanyaan hari ini. Kuota akan direset otomatis besok.`}
               action={
-                process.env.NODE_ENV === "development" ? (
+                DEV ? (
                   <button
                     onClick={() => {
-                      localStorage.removeItem(KUOTA_KEY);
-                      setSisaKuota(KUOTA_HARIAN);
+                      kuota.reset();
                       setSimulasi("normal");
                       setStatus("idle");
                     }}
@@ -250,9 +223,9 @@ export default function AnalisPage() {
               <SendHorizonal className="size-4" />
             </button>
           </div>
-          {sisaKuota !== null && (
+          {kuota.sisa !== null && (
             <p className="px-2 pt-1 text-[11px] text-muted-foreground">
-              Sisa kuota hari ini: {Math.max(sisaKuota, 0)}/{KUOTA_HARIAN}
+              Sisa kuota hari ini: {Math.max(kuota.sisa, 0)}/{KUOTA_HARIAN}
             </p>
           )}
         </div>

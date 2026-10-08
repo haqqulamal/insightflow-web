@@ -47,7 +47,7 @@ export function ResponseView({ run }: { run: K1Response }) {
       </ul>
 
       {/* Chart */}
-      <DynamicChart rows={run.data.rows} title={run.chart.title} />
+      <DynamicChart rows={run.data.rows} tipe={run.chart.type} title={run.chart.title} />
 
       {/* Aksi lanjutan */}
       {run.suggested_actions.length > 0 && (

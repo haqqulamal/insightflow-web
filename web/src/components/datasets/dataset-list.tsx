@@ -5,6 +5,7 @@ import type { Dataset } from "@/lib/api-client";
 import { formatAngka, formatTanggal } from "@/lib/formatters";
 import { StateBlock } from "@/components/ui/state-block";
 import { Skeleton } from "@/components/ui/skeleton";
+import { DEV } from "@/lib/dev";
 import { Database } from "lucide-react";
 
 type Mode = "normal" | "empty" | "error";
@@ -24,7 +25,7 @@ export function DatasetList({ datasets }: { datasets: Dataset[] }) {
 
   return (
     <div className="space-y-4">
-      {process.env.NODE_ENV === "development" && (
+      {DEV && (
         <label className="flex items-center gap-2 text-xs text-muted-foreground">
           Simulasi state (dev):
           <select

@@ -11,8 +11,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <div className="flex min-h-screen">
       {/* Sidebar: drawer di mobile, ikon di tablet, penuh di desktop */}
       <div
-        className={`fixed inset-y-0 left-0 z-40 transition-transform md:static md:translate-x-0 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed inset-y-0 left-0 z-40 transition-[transform,visibility] duration-300 md:visible md:static md:translate-x-0 ${
+          sidebarOpen ? "translate-x-0" : "invisible -translate-x-full"
         }`}
       >
         <AppSidebar onNavigate={() => setSidebarOpen(false)} />

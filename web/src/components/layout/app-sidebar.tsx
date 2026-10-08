@@ -12,6 +12,7 @@ import {
   FileBarChart,
   Plug,
   Settings,
+  X,
 } from "lucide-react";
 
 type NavItem = {
@@ -47,7 +48,7 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
           className="md:hidden p-1.5 rounded-md hover:bg-accent text-slate-ink"
           onClick={onNavigate}
         >
-          ✕
+          <X className="size-4" />
         </button>
       </div>
       <nav className="flex-1 px-2 py-2 space-y-0.5">
