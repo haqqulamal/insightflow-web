@@ -24,5 +24,5 @@ export function DynamicChart({
       },
     ],
   };
-  return <ReactECharts option={option} style={{ height: 280 }} />;
+  return <ReactECharts option={option} style={{ height: 240 }} />;
 }

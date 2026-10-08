@@ -20,10 +20,10 @@ export default function AnalisPage() {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-8rem)]">
+    <div className="flex flex-col h-[calc(100dvh-7rem)]">
       <h1 className="text-xl font-semibold text-navy mb-4">AI Analyst</h1>
 
-      <div className="flex-1 space-y-4 overflow-y-auto pb-4">
+      <div className="flex-1 min-h-0 space-y-4 overflow-y-auto pb-4">
         {riwayat.length === 0 && (
           <p className="text-sm text-muted-foreground">
             Tanyakan sesuatu tentang datamu — jawaban akan memakai data mock (K-1) dulu.
@@ -41,7 +41,7 @@ export default function AnalisPage() {
         ))}
       </div>
 
-      <div className="flex items-center gap-2 rounded-lg border border-border bg-white p-2">
+      <div className="sticky bottom-0 flex items-center gap-2 rounded-lg border border-border bg-white p-2 mt-2">
         <input
           value={pertanyaan}
           onChange={(e) => setPertanyaan(e.target.value)}

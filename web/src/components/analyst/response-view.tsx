@@ -20,11 +20,11 @@ export function ResponseView({ run }: { run: K1Response }) {
 
       <ul className="space-y-1.5">
         {run.findings.map((f) => (
-          <li key={f.id} className="flex items-start gap-2 text-sm">
-            <span className={`text-[10px] mt-0.5 rounded-full px-2 py-0.5 ${labelStyle[f.type]}`}>
+          <li key={f.id} className="text-sm leading-relaxed">
+            <span className={`inline-block text-[10px] rounded-full px-2 py-0.5 mr-1.5 align-middle ${labelStyle[f.type]}`}>
               {labelText[f.type]}
             </span>
-            <span className="text-slate-ink">{f.text}</span>
+            <span className="text-slate-ink align-middle">{f.text}</span>
           </li>
         ))}
       </ul>
