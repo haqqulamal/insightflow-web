@@ -21,7 +21,11 @@ export function DynamicChart({
     grid: { left: 8, right: 16, top: 40, bottom: 8, containLabel: true },
     xAxis: {
       type: "value" as const,
-      axisLabel: { formatter: (v: number) => formatRupiahSingkat(v) },
+      splitNumber: 4,
+      axisLabel: {
+        hideOverlap: true,
+        formatter: (v: number) => (v === 0 ? "0" : formatRupiahSingkat(v)),
+      },
     },
     yAxis: { type: "category" as const, data: rows.map((r) => r[0]), inverse: true },
     series: [
