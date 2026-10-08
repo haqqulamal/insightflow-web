@@ -25,7 +25,7 @@ export default function AnalisPage() {
       <h1 className="text-xl font-semibold text-navy mb-4">AI Analyst</h1>
 
       <div className="flex-1 min-h-0 flex flex-col lg:flex-row gap-4 overflow-hidden">
-        <div className="flex-1 min-h-0 flex flex-col overflow-y-auto pb-4 space-y-4">
+        <div className="order-2 lg:order-1 flex-1 min-h-0 flex flex-col overflow-y-auto pb-4 space-y-4">
           {riwayat.length === 0 && (
             <p className="text-sm text-muted-foreground">
               Tanyakan sesuatu tentang datamu — jawaban akan memakai data mock (K-1) dulu.
