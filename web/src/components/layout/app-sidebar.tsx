@@ -38,9 +38,17 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <aside className="h-full w-60 md:w-16 lg:w-60 shrink-0 border-r border-border bg-surface flex flex-col">
-      <div className="h-14 flex items-center px-4 font-semibold text-navy md:justify-center lg:justify-start">
+      <div className="h-14 flex items-center justify-between gap-2 px-4 font-semibold text-navy md:justify-center lg:justify-start">
         <span className="md:hidden lg:inline">InsightFlow AI</span>
         <span className="hidden md:inline lg:hidden">IF</span>
+        <button
+          type="button"
+          aria-label="Tutup menu"
+          className="md:hidden p-1.5 rounded-md hover:bg-accent text-slate-ink"
+          onClick={onNavigate}
+        >
+          ✕
+        </button>
       </div>
       <nav className="flex-1 px-2 py-2 space-y-0.5">
         {navItems.map((item) => {
