@@ -14,8 +14,9 @@ export function DynamicChart({
   const option = {
     title: { text: title, textStyle: { fontSize: 14 } },
     tooltip: {},
-    xAxis: { type: "category" as const, data: rows.map((r) => r[0]) },
-    yAxis: { type: "value" as const },
+    grid: { left: 8, right: 16, top: 40, bottom: 8, containLabel: true },
+    xAxis: { type: "value" as const },
+    yAxis: { type: "category" as const, data: rows.map((r) => r[0]), inverse: true },
     series: [
       {
         type: "bar" as const,
