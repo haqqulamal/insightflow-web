@@ -33,13 +33,14 @@ const navItems: NavItem[] = [
   { href: "/app/pengaturan", label: "Pengaturan", icon: Settings },
 ];
 
-export function AppSidebar() {
+export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
 
   return (
-    <aside className="w-60 shrink-0 border-r border-border bg-surface flex flex-col">
-      <div className="h-14 flex items-center px-4 font-semibold text-navy">
-        InsightFlow AI
+    <aside className="h-full w-60 md:w-16 lg:w-60 shrink-0 border-r border-border bg-surface flex flex-col">
+      <div className="h-14 flex items-center px-4 font-semibold text-navy md:justify-center lg:justify-start">
+        <span className="md:hidden lg:inline">InsightFlow AI</span>
+        <span className="hidden md:inline lg:hidden">IF</span>
       </div>
       <nav className="flex-1 px-2 py-2 space-y-0.5">
         {navItems.map((item) => {
@@ -49,18 +50,23 @@ export function AppSidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-2.5 rounded-md px-3 py-2 text-sm ${
+              title={item.label}
+              onClick={onNavigate}
+              className={`flex items-center gap-2.5 rounded-md px-3 py-2 text-sm md:justify-center lg:justify-start ${
                 active
                   ? "bg-primary/10 text-primary font-medium"
                   : "text-slate-ink hover:bg-accent"
               }`}
             >
-              <Icon className="size-4" />
-              <span className="flex-1">{item.label}</span>
+              <Icon className="size-4 shrink-0" />
+              <span className="flex-1 md:hidden lg:inline">{item.label}</span>
               {item.badge && (
-                <span className="text-[10px] rounded-full border border-border px-1.5 py-0.5 text-muted-foreground">
+                <span className="text-[10px] rounded-full border border-border px-1.5 py-0.5 text-muted-foreground md:hidden lg:inline">
                   {item.badge}
                 </span>
+              )}
+              {item.badge && (
+                <span className="hidden md:inline lg:hidden size-1.5 rounded-full bg-muted-foreground/50" />
               )}
             </Link>
           );

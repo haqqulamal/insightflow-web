@@ -1,18 +1,28 @@
-import { Search, Gauge, UserCircle } from "lucide-react";
+"use client";
 
-export function AppHeader() {
+import { Search, Gauge, UserCircle, Menu } from "lucide-react";
+
+export function AppHeader({ onMenuClick }: { onMenuClick?: () => void }) {
   return (
     <header className="h-14 border-b border-border flex items-center gap-4 px-4 bg-white">
-      <div className="flex-1 max-w-md flex items-center gap-2 rounded-md border border-border px-3 py-1.5 text-sm text-muted-foreground">
+      <button
+        className="md:hidden p-1.5 rounded-md hover:bg-accent"
+        onClick={onMenuClick}
+        aria-label="Buka menu"
+      >
+        <Menu className="size-5" />
+      </button>
+      <div className="flex-1 max-w-md hidden sm:flex items-center gap-2 rounded-md border border-border px-3 py-1.5 text-sm text-muted-foreground">
         <Search className="size-4" />
         <input
           placeholder="Cari dataset, analisis..."
           className="flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
         />
       </div>
+      <div className="flex-1 sm:hidden" />
       <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
         <Gauge className="size-4" />
-        Pemakaian
+        <span className="hidden sm:inline">Pemakaian</span>
       </div>
       <UserCircle className="size-6 text-slate-ink" />
     </header>
