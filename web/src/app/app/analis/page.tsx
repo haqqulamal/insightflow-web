@@ -3,15 +3,26 @@
 import { useEffect, useState } from "react";
 import { getAnalystRun, type K1Response } from "@/lib/api-client";
 import { ResponseView } from "@/components/analyst/response-view";
-import { ContextPanel } from "@/components/analyst/context-panel";
+import {
+  ContextSheet,
+  ContextSidebar,
+  type Konteks,
+} from "@/components/analyst/context-panel";
 import { StateBlock } from "@/components/ui/state-block";
 import { Skeleton } from "@/components/ui/skeleton";
-import { SendHorizonal } from "lucide-react";
+import { SendHorizonal, SlidersHorizontal } from "lucide-react";
 
 const KUOTA_HARIAN = 10;
 const KUOTA_KEY = "insightflow-kuota-analis";
 const SIMULASI = ["normal", "error", "kuota"] as const;
 type Simulasi = (typeof SIMULASI)[number];
+
+const SARAN_PERTANYAAN = [
+  "Kenapa omzet bulan ini turun?",
+  "Produk mana yang paling laku?",
+  "Wilayah mana penjualannya paling rendah?",
+  "Beri rekomendasi untuk naikkan penjualan",
+];
 
 function hariIni() {
   return new Date().toISOString().slice(0, 10);
@@ -41,6 +52,13 @@ export default function AnalisPage() {
   const [status, setStatus] = useState<Status>("idle");
   const [sisaKuota, setSisaKuota] = useState<number | null>(null);
   const [simulasi, setSimulasi] = useState<Simulasi>("normal");
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [konteks, setKonteks] = useState<Konteks>({
+    dataset: "Penjualan Sep 2026 (v3)",
+    metrik: "omzet_bersih",
+    periode: "Sep 2026",
+    filter: "—",
+  });
   const [riwayat, setRiwayat] = useState<
     { tanya: string; jawab: K1Response }[]
   >([]);
@@ -80,12 +98,20 @@ export default function AnalisPage() {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100dvh-7rem)]">
-      <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+    <div className="flex h-[calc(100dvh-7rem)] flex-col">
+      {/* Bar atas */}
+      <div className="mb-4 flex items-center justify-between gap-2">
         <h1 className="text-xl font-semibold text-navy">AI Analyst</h1>
-        {process.env.NODE_ENV === "development" && (
-          <label className="flex items-center gap-2 text-xs text-muted-foreground">
-            Simulasi state (dev):
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setSheetOpen(true)}
+            className="flex max-w-[10rem] items-center gap-1.5 truncate rounded-full border border-border bg-white px-3 py-1.5 text-xs text-navy lg:hidden"
+          >
+            <SlidersHorizontal className="size-3.5 shrink-0 text-primary" />
+            <span className="truncate">{konteks.dataset}</span>
+          </button>
+          {process.env.NODE_ENV === "development" && (
             <select
               value={simulasi}
               onChange={(e) => {
@@ -93,27 +119,49 @@ export default function AnalisPage() {
                 setSimulasi(s);
                 setStatus("idle");
               }}
-              className="rounded-md border border-border bg-white px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-primary/40"
+              aria-label="Simulasi state (dev)"
+              className="rounded-md border border-border bg-white px-2 py-1.5 text-xs text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
             >
-              <option value="normal">Normal</option>
-              <option value="error">Error</option>
-              <option value="kuota">Kuota habis</option>
+              <option value="normal">Simulasi: Normal</option>
+              <option value="error">Simulasi: Error</option>
+              <option value="kuota">Simulasi: Kuota habis</option>
             </select>
-          </label>
-        )}
+          )}
+        </div>
       </div>
 
-      <div className="flex-1 min-h-0 flex flex-col lg:flex-row gap-4 overflow-hidden">
-        <div className="order-2 lg:order-1 flex-1 min-h-0 flex flex-col overflow-y-auto pb-4 space-y-4">
-          {riwayat.length === 0 && status !== "error" && (
-            <p className="text-sm text-muted-foreground">
-              Tanyakan sesuatu tentang datamu — jawaban akan memakai data mock (K-1) dulu.
-            </p>
+      {/* Konten */}
+      <div className="flex min-h-0 flex-1 flex-col lg:flex-row lg:gap-4 lg:overflow-hidden">
+        <div className="order-2 flex min-h-0 flex-1 flex-col space-y-4 overflow-y-auto pb-4 lg:order-1">
+          {/* Empty state: sapaan + saran */}
+          {riwayat.length === 0 && status === "idle" && (
+            <div className="space-y-4 pb-4 pt-6 text-center">
+              <p className="text-lg font-semibold text-navy">
+                Mau tahu apa tentang bisnismu?
+              </p>
+              <p className="mx-auto max-w-sm text-sm text-muted-foreground">
+                Tanyakan apa saja tentang data penjualanmu — jawaban masih memakai
+                data mock (K-1) selama backend belum tersambung.
+              </p>
+              <div className="flex flex-wrap justify-center gap-2">
+                {SARAN_PERTANYAAN.map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => setPertanyaan(s)}
+                    className="rounded-full border border-border bg-white px-3 py-1.5 text-xs text-navy hover:border-primary hover:text-primary"
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
           )}
+
           {riwayat.map((item, i) => (
             <div key={i} className="space-y-3">
               <div className="flex justify-end">
-                <div className="rounded-lg bg-primary text-white px-4 py-2 text-sm max-w-md">
+                <div className="max-w-md rounded-lg bg-primary px-4 py-2 text-sm text-white">
                   {item.tanya}
                 </div>
               </div>
@@ -122,11 +170,11 @@ export default function AnalisPage() {
           ))}
 
           {status === "loading" && (
-            <div className="rounded-lg border border-border bg-white p-4 space-y-3">
+            <div className="space-y-3 rounded-lg border border-border bg-white p-4">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span className="size-2 rounded-full bg-primary animate-bounce [animation-delay:-0.2s]" />
-                <span className="size-2 rounded-full bg-primary animate-bounce [animation-delay:-0.1s]" />
-                <span className="size-2 rounded-full bg-primary animate-bounce" />
+                <span className="size-2 animate-bounce rounded-full bg-primary [animation-delay:-0.2s]" />
+                <span className="size-2 animate-bounce rounded-full bg-primary [animation-delay:-0.1s]" />
+                <span className="size-2 animate-bounce rounded-full bg-primary" />
                 AI sedang menganalisis...
               </div>
               <Skeleton className="h-4 w-3/4" />
@@ -174,9 +222,11 @@ export default function AnalisPage() {
             />
           )}
         </div>
-        <ContextPanel />
+
+        <ContextSidebar konteks={konteks} onChange={setKonteks} />
       </div>
 
+      {/* Input */}
       {status === "quota" ? (
         <div className="mt-2 rounded-lg border border-dashed border-warning/50 bg-warning/5 px-4 py-3 text-center text-xs text-warning">
           Kuota harian terpakai — kembali lagi besok.
@@ -193,7 +243,8 @@ export default function AnalisPage() {
             />
             <button
               onClick={kirim}
-              className="rounded-md bg-primary text-white p-2 disabled:opacity-50"
+              aria-label="Kirim pertanyaan"
+              className="rounded-md bg-primary p-2 text-white disabled:opacity-50"
               disabled={!pertanyaan.trim() || status === "loading"}
             >
               <SendHorizonal className="size-4" />
@@ -206,6 +257,14 @@ export default function AnalisPage() {
           )}
         </div>
       )}
+
+      {/* Bottom sheet konteks (mobile) */}
+      <ContextSheet
+        open={sheetOpen}
+        onClose={() => setSheetOpen(false)}
+        konteks={konteks}
+        onChange={setKonteks}
+      />
     </div>
   );
 }
