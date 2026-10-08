@@ -1,4 +1,11 @@
 import datasets from "@/lib/mocks/datasets.json";
+import k1 from "@/lib/mocks/k1-response.json";
+
+export async function getAnalystRun() {
+  return k1;
+}
+
+export type K1Response = typeof k1;
 
 export type Dataset = (typeof datasets)[number];
 

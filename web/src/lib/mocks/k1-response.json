@@ -1,0 +1,34 @@
+{
+  "contract_version": "1.0",
+  "run_id": "run_01HMOCK",
+  "conversation_id": "conv_01HMOCK",
+  "status": "completed",
+  "answer": "Omzet turun 12,4% dibanding bulan lalu.",
+  "findings": [
+    { "id": "f1", "type": "fact", "text": "Wilayah Timur turun 18,2%.", "evidence_ref": "q1" },
+    { "id": "f2", "type": "inference", "text": "Penurunan terkonsentrasi di Produk A; mungkin terkait stok atau harga.", "evidence_ref": "q2" },
+    { "id": "f3", "type": "recommendation", "text": "Periksa stok dan harga Produk A di wilayah Timur.", "evidence_ref": null }
+  ],
+  "metric_definitions": [
+    { "metric": "omzet_bersih", "label": "Omzet bersih", "summary": "Penjualan − diskon penjual − retur, tanpa pesanan dibatalkan" }
+  ],
+  "queries": [
+    { "id": "q1", "sql": "SELECT wilayah, SUM(omzet) AS omzet FROM pesanan GROUP BY 1 ORDER BY 2 DESC", "row_count": 5, "truncated": false, "duration_ms": 42, "dataset_version_id": "dsv_01HMOCK" }
+  ],
+  "data": {
+    "query_id": "q1",
+    "columns": [{ "name": "wilayah", "type": "string" }, { "name": "omzet", "type": "number" }],
+    "rows": [["Jawa Barat", 412000000], ["DKI Jakarta", 358000000], ["Jawa Timur", 295000000], ["Sumatera Utara", 180000000], ["Timur", 132000000]]
+  },
+  "chart": { "type": "bar", "x": "wilayah", "y": ["omzet"], "series": null, "sort": "desc", "title": "Omzet per wilayah" },
+  "confidence": { "level": "high", "reasons": ["Definisi metrik dari glosarium", "Hasil lolos pemeriksaan kewajaran"] },
+  "clarification": null,
+  "refusal": null,
+  "warnings": [],
+  "suggested_actions": [
+    { "id": "a1", "label": "Rinci per produk", "action": "ask", "payload": { "question": "Rinci per produk di wilayah Timur" } },
+    { "id": "a2", "label": "Forecast 3 bulan", "action": "forecast", "payload": { "metric": "omzet_bersih", "horizon_days": 90 } }
+  ],
+  "rag_context": { "schema": ["pesanan.tanggal_pesanan"], "metrics": ["omzet_bersih"], "few_shot_ids": ["fs_01HMOCK"] },
+  "usage": { "counted": true, "llm_calls": 3, "tokens_in": 4210, "tokens_out": 520 }
+}
