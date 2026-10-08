@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { getAnalystRun, type K1Response } from "@/lib/api-client";
 import { ResponseView } from "@/components/analyst/response-view";
+import { ContextPanel } from "@/components/analyst/context-panel";
 import { SendHorizonal } from "lucide-react";
 
 export default function AnalisPage() {
@@ -23,22 +24,25 @@ export default function AnalisPage() {
     <div className="flex flex-col h-[calc(100dvh-7rem)]">
       <h1 className="text-xl font-semibold text-navy mb-4">AI Analyst</h1>
 
-      <div className="flex-1 min-h-0 space-y-4 overflow-y-auto pb-4">
-        {riwayat.length === 0 && (
-          <p className="text-sm text-muted-foreground">
-            Tanyakan sesuatu tentang datamu — jawaban akan memakai data mock (K-1) dulu.
-          </p>
-        )}
-        {riwayat.map((item, i) => (
-          <div key={i} className="space-y-3">
-            <div className="flex justify-end">
-              <div className="rounded-lg bg-primary text-white px-4 py-2 text-sm max-w-md">
-                {item.tanya}
+      <div className="flex-1 min-h-0 flex flex-col lg:flex-row gap-4 overflow-hidden">
+        <div className="flex-1 min-h-0 flex flex-col overflow-y-auto pb-4 space-y-4">
+          {riwayat.length === 0 && (
+            <p className="text-sm text-muted-foreground">
+              Tanyakan sesuatu tentang datamu — jawaban akan memakai data mock (K-1) dulu.
+            </p>
+          )}
+          {riwayat.map((item, i) => (
+            <div key={i} className="space-y-3">
+              <div className="flex justify-end">
+                <div className="rounded-lg bg-primary text-white px-4 py-2 text-sm max-w-md">
+                  {item.tanya}
+                </div>
               </div>
+              <ResponseView run={item.jawab} />
             </div>
-            <ResponseView run={item.jawab} />
-          </div>
-        ))}
+          ))}
+        </div>
+        <ContextPanel />
       </div>
 
       <div className="sticky bottom-0 flex items-center gap-2 rounded-lg border border-border bg-white p-2 mt-2">
