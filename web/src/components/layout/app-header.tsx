@@ -12,7 +12,7 @@ export function AppHeader({ onMenuClick }: { onMenuClick?: () => void }) {
       >
         <Menu className="size-5" />
       </button>
-      <div className="flex-1 max-w-md hidden sm:flex items-center gap-2 rounded-md border border-border px-3 py-1.5 text-sm text-muted-foreground">
+      <div className="flex-1 max-w-xl hidden sm:flex items-center gap-2 rounded-md border border-border px-3 py-1.5 text-sm text-muted-foreground">
         <Search className="size-4" />
         <input
           placeholder="Cari dataset, analisis..."
