@@ -30,10 +30,12 @@ export function ResponseView({ run }: { run: K1Response }) {
   return (
     <div className="card-pad space-y-5 rounded-lg border border-border bg-white">
       {/* Ringkasan */}
-      <p className="text-[15px] font-medium leading-relaxed text-navy">{run.answer}</p>
+      <p className="max-w-prose text-[15px] font-medium leading-relaxed text-navy">
+        {run.answer}
+      </p>
 
       {/* Temuan */}
-      <ul className="space-y-3">
+      <ul className="max-w-prose space-y-3">
         {run.findings.map((f) => (
           <li key={f.id} className="flex items-start gap-3 text-[15px] leading-relaxed">
             <span
@@ -70,7 +72,7 @@ export function ResponseView({ run }: { run: K1Response }) {
           <ChevronDown className="size-4 transition-transform group-open:rotate-180" />
         </summary>
 
-        <div className="mt-4 space-y-5 text-sm">
+        <div className="mt-4 max-w-prose space-y-5 text-sm">
           <div>
             <p className="mb-1 text-xs text-muted-foreground">SQL</p>
             <pre className="overflow-x-auto rounded-md bg-navy p-3 text-xs text-slate-100">

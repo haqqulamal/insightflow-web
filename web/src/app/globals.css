@@ -92,7 +92,6 @@
   --space-section: 1.75rem; /* jarak antar-blok */
   --space-card: 1.125rem; /* padding dalam kartu */
   --app-bar-h: 3.5rem;
-  --tabbar-h: 3.5rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);

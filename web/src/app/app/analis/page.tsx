@@ -113,8 +113,8 @@ export default function AnalisPage() {
         />
       </div>
 
-      {/* Konten — kolom tengah dengan lebar baca yang nyaman */}
-      <div className="mx-auto flex min-h-0 w-full max-w-3xl flex-1 flex-col space-y-6 overflow-y-auto pb-6">
+      {/* Konten — penuh, judul dan isi dalam satu garis */}
+      <div className="flex min-h-0 w-full flex-1 flex-col space-y-6 overflow-y-auto pb-6">
           {/* Empty state: sapaan + saran */}
           {riwayat.length === 0 && status === "idle" && (
             <div className="m-auto space-y-5 px-2 py-10 text-center">
@@ -205,7 +205,7 @@ export default function AnalisPage() {
       </div>
 
       {/* Input */}
-      <div className="mx-auto w-full max-w-3xl">
+      <div className="w-full">
         {status === "quota" ? (
           <div className="mt-4 rounded-lg border border-dashed border-warning/50 bg-warning/5 px-4 py-3.5 text-center text-xs text-warning">
             Kuota harian terpakai — kembali lagi besok.
