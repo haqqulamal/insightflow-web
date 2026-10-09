@@ -5,7 +5,7 @@ import { getAnalystRun, type K1Response } from "@/lib/api-client";
 import { ResponseView } from "@/components/analyst/response-view";
 import {
   ContextSheet,
-  ContextSidebar,
+  ContextSummary,
   type Konteks,
 } from "@/components/analyst/context-panel";
 import { StateBlock } from "@/components/ui/state-block";
@@ -106,14 +106,18 @@ export default function AnalisPage() {
           <SlidersHorizontal className="size-4 shrink-0 text-primary" />
           <span className="truncate">{konteks.dataset}</span>
         </button>
+        <ContextSummary
+          konteks={konteks}
+          onChange={setKonteks}
+          footer={alatDev}
+        />
       </div>
 
-      {/* Konten */}
-      <div className="flex min-h-0 flex-1 flex-col lg:flex-row lg:gap-4 lg:overflow-hidden">
-        <div className="order-2 flex min-h-0 flex-1 flex-col space-y-6 overflow-y-auto pb-6 lg:order-1">
+      {/* Konten — kolom tengah dengan lebar baca yang nyaman */}
+      <div className="mx-auto flex min-h-0 w-full max-w-3xl flex-1 flex-col space-y-6 overflow-y-auto pb-6">
           {/* Empty state: sapaan + saran */}
           {riwayat.length === 0 && status === "idle" && (
-            <div className="space-y-5 px-2 py-10 text-center">
+            <div className="m-auto space-y-5 px-2 py-10 text-center">
               <p className="text-xl font-semibold text-navy">
                 Mau tahu apa tentang bisnismu?
               </p>
@@ -198,42 +202,41 @@ export default function AnalisPage() {
               }
             />
           )}
-        </div>
-
-        <ContextSidebar konteks={konteks} onChange={setKonteks} footer={alatDev} />
       </div>
 
       {/* Input */}
-      {status === "quota" ? (
-        <div className="mt-4 rounded-lg border border-dashed border-warning/50 bg-warning/5 px-4 py-3.5 text-center text-xs text-warning">
-          Kuota harian terpakai — kembali lagi besok.
-        </div>
-      ) : (
-        <div className="mt-4 rounded-lg border border-border bg-white p-2.5">
-          <div className="flex items-center gap-2">
-            <input
-              value={pertanyaan}
-              onChange={(e) => setPertanyaan(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && kirim()}
-              placeholder="Tanya apa saja tentang data Anda..."
-              className="min-h-11 flex-1 bg-transparent px-3 text-[15px] outline-none"
-            />
-            <button
-              onClick={kirim}
-              aria-label="Kirim pertanyaan"
-              className="grid size-11 shrink-0 place-items-center rounded-md bg-primary text-white disabled:opacity-50"
-              disabled={!pertanyaan.trim() || status === "loading"}
-            >
-              <SendHorizonal className="size-5" />
-            </button>
+      <div className="mx-auto w-full max-w-3xl">
+        {status === "quota" ? (
+          <div className="mt-4 rounded-lg border border-dashed border-warning/50 bg-warning/5 px-4 py-3.5 text-center text-xs text-warning">
+            Kuota harian terpakai — kembali lagi besok.
           </div>
-          {kuota.sisa !== null && (
-            <p className="px-3 pt-1.5 text-[11px] text-muted-foreground">
-              Sisa kuota hari ini: {Math.max(kuota.sisa, 0)}/{KUOTA_HARIAN}
-            </p>
-          )}
-        </div>
-      )}
+        ) : (
+          <div className="mt-4 rounded-lg border border-border bg-white p-2.5">
+            <div className="flex items-center gap-2">
+              <input
+                value={pertanyaan}
+                onChange={(e) => setPertanyaan(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && kirim()}
+                placeholder="Tanya apa saja tentang data Anda..."
+                className="min-h-11 flex-1 bg-transparent px-3 text-[15px] outline-none"
+              />
+              <button
+                onClick={kirim}
+                aria-label="Kirim pertanyaan"
+                className="grid size-11 shrink-0 place-items-center rounded-md bg-primary text-white disabled:opacity-50"
+                disabled={!pertanyaan.trim() || status === "loading"}
+              >
+                <SendHorizonal className="size-5" />
+              </button>
+            </div>
+            {kuota.sisa !== null && (
+              <p className="px-3 pt-1.5 text-[11px] text-muted-foreground">
+                Sisa kuota hari ini: {Math.max(kuota.sisa, 0)}/{KUOTA_HARIAN}
+              </p>
+            )}
+          </div>
+        )}
+      </div>
 
       {/* Bottom sheet konteks (mobile) */}
       <ContextSheet

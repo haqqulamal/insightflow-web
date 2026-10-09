@@ -1,6 +1,11 @@
 "use client";
 
-import { ChevronDown, SlidersHorizontal, X } from "lucide-react";
+import { ChevronDown, Database, SlidersHorizontal, X } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 export type Konteks = {
   dataset: string;
@@ -89,8 +94,8 @@ export function ContextFields({
   );
 }
 
-/** Sidebar kanan — hanya desktop (lg). */
-export function ContextSidebar({
+/** Ringkasan konteks + popover editor — hanya desktop (lg). */
+export function ContextSummary({
   konteks,
   onChange,
   footer,
@@ -100,13 +105,30 @@ export function ContextSidebar({
   footer?: React.ReactNode;
 }) {
   return (
-    <aside className="hidden w-72 shrink-0 self-start rounded-lg border border-border bg-white p-5 lg:block">
-      <div className="mb-4 flex items-center gap-2 text-sm font-medium text-navy">
-        <SlidersHorizontal className="size-4" />
-        Konteks Data
+    <div className="hidden items-center gap-2 lg:flex">
+      <div className="flex max-w-[26rem] items-center gap-2 truncate rounded-full border border-border bg-white px-3.5 py-1.5 text-xs text-muted-foreground">
+        <Database className="size-3.5 shrink-0 text-primary" />
+        <span className="min-w-0 truncate font-medium text-navy">{konteks.dataset}</span>
+        <span aria-hidden="true" className="shrink-0">
+          ·
+        </span>
+        <span className="truncate">{konteks.metrik}</span>
+        <span aria-hidden="true" className="shrink-0">
+          ·
+        </span>
+        <span className="truncate">{konteks.periode}</span>
       </div>
-      <ContextFields konteks={konteks} onChange={onChange} footer={footer} />
-    </aside>
+
+      <Popover>
+        <PopoverTrigger className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-border bg-white px-3.5 text-xs font-medium text-navy hover:bg-accent focus-visible:ring-2 focus-visible:ring-primary/40">
+          <SlidersHorizontal className="size-3.5" />
+          Konteks
+        </PopoverTrigger>
+        <PopoverContent>
+          <ContextFields konteks={konteks} onChange={onChange} footer={footer} />
+        </PopoverContent>
+      </Popover>
+    </div>
   );
 }
 
