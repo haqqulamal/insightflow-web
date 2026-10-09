@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { UploadCloud } from "lucide-react";
+import { CheckCircle2, UploadCloud } from "lucide-react";
 
 type Fase = "idle" | "mengunggah" | "selesai" | "gagal";
 
@@ -47,7 +47,7 @@ export function Uploader() {
 
   return (
     <div
-      className="rounded-lg border-2 border-dashed border-border bg-white p-8 text-center cursor-pointer hover:border-primary/50 transition-colors"
+      className="cursor-pointer rounded-lg border-2 border-dashed border-border bg-white px-6 py-10 text-center transition-colors hover:border-primary/50"
       onClick={() => inputRef.current?.click()}
       onDragOver={(e) => e.preventDefault()}
       onDrop={(e) => {
@@ -67,15 +67,15 @@ export function Uploader() {
           e.target.value = ""; // reset agar file sama bisa dipilih ulang
         }}
       />
-      <UploadCloud className="size-8 mx-auto text-muted-foreground" />
+      <UploadCloud className="mx-auto size-9 text-muted-foreground" />
       {fase === "idle" && (
-        <p className="mt-2 text-sm text-muted-foreground">
+        <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
           Tarik CSV/XLSX ke sini, atau klik untuk memilih
         </p>
       )}
       {fase === "gagal" && (
-        <div className="mt-3 space-y-1">
-          <p className="text-sm text-destructive font-medium">
+        <div className="mt-4 space-y-1.5">
+          <p className="text-[15px] font-medium text-destructive">
             Format file tidak didukung
           </p>
           <p className="text-xs text-muted-foreground">
@@ -84,20 +84,23 @@ export function Uploader() {
         </div>
       )}
       {fase === "mengunggah" && (
-        <div className="mt-3 space-y-1.5">
-          <p className="text-sm text-slate-ink">{namaFile}</p>
-          <div className="h-2 rounded-full bg-accent overflow-hidden">
+        <div className="mt-4 space-y-2">
+          <p className="text-[15px] text-slate-ink">{namaFile}</p>
+          <div className="h-2 overflow-hidden rounded-full bg-accent">
             <div
               className="h-full bg-primary transition-all"
               style={{ width: `${progres}%` }}
             />
           </div>
-          <p className="text-xs text-muted-foreground">Memvalidasi & memproses...</p>
+          <p className="text-xs text-muted-foreground">
+            Memvalidasi & memproses...
+          </p>
         </div>
       )}
       {fase === "selesai" && (
-        <p className="mt-2 text-sm text-success font-medium">
-          ✓ {namaFile} berhasil diproses (mock)
+        <p className="mt-3 flex items-center justify-center gap-2 text-[15px] font-medium text-success">
+          <CheckCircle2 className="size-4" />
+          {namaFile} berhasil diproses (mock)
         </p>
       )}
     </div>

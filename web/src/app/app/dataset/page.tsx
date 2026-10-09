@@ -6,7 +6,7 @@ export default async function DatasetPage() {
   const datasets = await listDatasets();
 
   return (
-    <div className="space-y-6">
+    <div className="stack-section">
       <h1 className="text-xl font-semibold text-navy">Dataset</h1>
 
       <Uploader />

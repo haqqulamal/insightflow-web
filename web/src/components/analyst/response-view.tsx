@@ -1,6 +1,6 @@
 import type { K1Response } from "@/lib/contracts/k1";
 import { DynamicChart } from "./dynamic-chart";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, TriangleAlert } from "lucide-react";
 
 const labelStyle: Record<string, string> = {
   fact: "bg-success/10 text-success",
@@ -28,16 +28,16 @@ const confidenceText: Record<string, string> = {
 
 export function ResponseView({ run }: { run: K1Response }) {
   return (
-    <div className="space-y-4 rounded-lg border border-border bg-white p-4">
+    <div className="card-pad space-y-5 rounded-lg border border-border bg-white">
       {/* Ringkasan */}
-      <p className="text-sm font-medium leading-relaxed text-navy">{run.answer}</p>
+      <p className="text-[15px] font-medium leading-relaxed text-navy">{run.answer}</p>
 
       {/* Temuan */}
-      <ul className="space-y-2">
+      <ul className="space-y-3">
         {run.findings.map((f) => (
-          <li key={f.id} className="flex items-start gap-2 text-sm leading-relaxed">
+          <li key={f.id} className="flex items-start gap-3 text-[15px] leading-relaxed">
             <span
-              className={`mt-0.5 inline-block w-24 shrink-0 rounded-full px-2 py-0.5 text-center text-[10px] ${labelStyle[f.type]}`}
+              className={`mt-0.5 inline-block w-24 shrink-0 rounded-full px-2 py-1 text-center text-[10px] ${labelStyle[f.type]}`}
             >
               {labelText[f.type]}
             </span>
@@ -51,11 +51,11 @@ export function ResponseView({ run }: { run: K1Response }) {
 
       {/* Aksi lanjutan */}
       {run.suggested_actions.length > 0 && (
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2.5">
           {run.suggested_actions.map((a) => (
             <button
               key={a.id}
-              className="rounded-full border border-border px-3 py-1 text-xs hover:bg-accent"
+              className="min-h-11 rounded-full border border-border px-4 text-sm hover:bg-accent"
             >
               {a.label}
             </button>
@@ -64,13 +64,13 @@ export function ResponseView({ run }: { run: K1Response }) {
       )}
 
       {/* Detail teknis — tersembunyi secara default */}
-      <details className="group border-t border-border pt-3">
-        <summary className="flex cursor-pointer list-none items-center justify-between text-sm text-primary">
+      <details className="group border-t border-border pt-4">
+        <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between text-[15px] text-primary">
           Detail teknis
           <ChevronDown className="size-4 transition-transform group-open:rotate-180" />
         </summary>
 
-        <div className="mt-3 space-y-4 text-sm">
+        <div className="mt-4 space-y-5 text-sm">
           <div>
             <p className="mb-1 text-xs text-muted-foreground">SQL</p>
             <pre className="overflow-x-auto rounded-md bg-navy p-3 text-xs text-slate-100">
@@ -103,9 +103,12 @@ export function ResponseView({ run }: { run: K1Response }) {
           </div>
 
           {run.warnings.length > 0 && (
-            <ul className="space-y-1 text-xs text-warning">
+            <ul className="space-y-1.5 text-xs text-warning">
               {run.warnings.map((w, i) => (
-                <li key={i}>⚠ {String(w)}</li>
+                <li key={i} className="flex items-start gap-1.5">
+                  <TriangleAlert className="mt-px size-3.5 shrink-0" />
+                  <span>{String(w)}</span>
+                </li>
               ))}
             </ul>
           )}

@@ -1,30 +1,35 @@
 "use client";
 
-import { Search, Gauge, UserCircle, Menu } from "lucide-react";
+import { Gauge, Search, UserCircle } from "lucide-react";
 
-export function AppHeader({ onMenuClick }: { onMenuClick?: () => void }) {
+export function AppHeader() {
   return (
-    <header className="h-14 border-b border-border flex items-center gap-4 px-4 bg-white">
-      <button
-        className="md:hidden p-1.5 rounded-md hover:bg-accent"
-        onClick={onMenuClick}
-        aria-label="Buka menu"
-      >
-        <Menu className="size-5" />
-      </button>
-      <div className="flex-1 max-w-xl hidden sm:flex items-center gap-2 rounded-md border border-border px-3 py-1.5 text-sm text-muted-foreground">
+    <header className="flex h-[var(--app-bar-h)] items-center gap-3 border-b border-border bg-white px-4">
+      <span className="font-semibold text-navy sm:hidden">InsightFlow AI</span>
+
+      <div className="hidden max-w-xl flex-1 items-center gap-2 rounded-md border border-border px-3 py-2 text-sm text-muted-foreground sm:flex">
         <Search className="size-4" />
         <input
           placeholder="Cari dataset, analisis..."
           className="flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
         />
       </div>
-      <div className="ml-auto flex items-center gap-4">
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+
+      <div className="ml-auto flex items-center gap-2">
+        <button
+          type="button"
+          className="hidden items-center gap-1.5 rounded-md px-2 py-1.5 text-xs text-muted-foreground hover:bg-accent sm:flex"
+        >
           <Gauge className="size-4" />
-          <span className="hidden sm:inline">Pemakaian</span>
-        </div>
-        <UserCircle className="size-6 text-slate-ink" />
+          Pemakaian
+        </button>
+        <button
+          type="button"
+          aria-label="Profil pengguna"
+          className="rounded-full p-1 hover:bg-accent"
+        >
+          <UserCircle className="size-6 text-slate-ink" />
+        </button>
       </div>
     </header>
   );

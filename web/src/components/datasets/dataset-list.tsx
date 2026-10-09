@@ -24,7 +24,7 @@ export function DatasetList({ datasets }: { datasets: Dataset[] }) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {DEV && (
         <label className="flex items-center gap-2 text-xs text-muted-foreground">
           Simulasi state (dev):
@@ -35,7 +35,7 @@ export function DatasetList({ datasets }: { datasets: Dataset[] }) {
               setSimulasi(m);
               muatUlang(m);
             }}
-            className="rounded-md border border-border bg-white px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-primary/40"
+            className="min-h-11 rounded-md border border-border bg-white px-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/40"
           >
             <option value="normal">Normal</option>
             <option value="empty">Kosong</option>
@@ -45,9 +45,9 @@ export function DatasetList({ datasets }: { datasets: Dataset[] }) {
       )}
 
       {tampilan === "loading" && (
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="rounded-lg border border-border bg-white p-4 space-y-3">
+            <div key={i} className="card-pad space-y-3 rounded-lg border border-border bg-white">
               <Skeleton className="h-4 w-2/3" />
               <Skeleton className="h-3 w-full" />
               <Skeleton className="h-3 w-1/2" />
@@ -64,7 +64,7 @@ export function DatasetList({ datasets }: { datasets: Dataset[] }) {
           action={
             <button
               onClick={() => muatUlang("normal")}
-              className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90"
+              className="min-h-11 rounded-md bg-primary px-5 text-sm font-medium text-white hover:bg-primary/90"
             >
               Coba lagi
             </button>
@@ -81,23 +81,25 @@ export function DatasetList({ datasets }: { datasets: Dataset[] }) {
       )}
 
       {tampilan === "normal" && (
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {datasets.map((ds) => (
             <div
               key={ds.id}
-              className="rounded-lg border border-border bg-white p-4 space-y-2"
+              className="card-pad space-y-3 rounded-lg border border-border bg-white"
             >
-              <div className="flex items-center gap-2">
-                <Database className="size-4 text-primary" />
-                <p className="font-medium text-sm text-navy truncate">{ds.nama}</p>
+              <div className="flex items-center gap-2.5">
+                <Database className="size-5 shrink-0 text-primary" />
+                <p className="truncate text-[15px] font-medium text-navy">{ds.nama}</p>
               </div>
-              <p className="text-xs text-muted-foreground">
-                Sumber: {ds.sumber} · {formatAngka(ds.baris)} baris · {ds.kolom} kolom
-              </p>
-              <p className="text-xs text-muted-foreground">
-                Kualitas {ds.kualitas}% · {formatTanggal(ds.diperbarui)}
-              </p>
-              <span className="inline-block text-[10px] rounded-full bg-success/10 text-success px-2 py-0.5">
+              <div className="space-y-1">
+                <p className="text-sm text-slate-ink">
+                  {ds.kolom} kolom · {formatAngka(ds.baris)} baris
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {ds.sumber} · Kualitas {ds.kualitas}% · {formatTanggal(ds.diperbarui)}
+                </p>
+              </div>
+              <span className="inline-block rounded-full bg-success/10 px-2.5 py-1 text-[11px] text-success">
                 {ds.status}
               </span>
             </div>

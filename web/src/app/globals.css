@@ -87,6 +87,12 @@
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
+  /* Ritme kerapatan mobile-first */
+  --space-page: 1rem; /* padding tepi halaman */
+  --space-section: 1.75rem; /* jarak antar-blok */
+  --space-card: 1.125rem; /* padding dalam kartu */
+  --app-bar-h: 3.5rem;
+  --tabbar-h: 3.5rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -140,5 +146,33 @@
   }
   html {
     @apply font-sans;
+  }
+  /* Layar sentuh: teks isi lebih lega */
+  @media (max-width: 1023px) {
+    html {
+      font-size: 17px;
+    }
+  }
+}
+
+@layer components {
+  /* Ritme antar-blok halaman */
+  .stack-section > * + * {
+    margin-top: var(--space-section);
+  }
+  .card-pad {
+    padding: var(--space-card);
+  }
+  /* Jarak aman untuk elemen yang menempel tepi bawah (home indicator) */
+  .pb-safe {
+    padding-bottom: max(var(--space-page), env(safe-area-inset-bottom));
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --space-page: 1.5rem;
+    --space-section: 2.25rem;
+    --space-card: 1.375rem;
   }
 }
