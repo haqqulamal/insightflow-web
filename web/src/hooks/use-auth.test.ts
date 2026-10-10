@@ -12,7 +12,7 @@ const localStorageMock = {
   clear: () => store.clear(),
 };
 
-describe("useAuth logic", () => {
+describe("useAuth logic & cache", () => {
   const AUTH_KEY = "insightflow-user-demo";
 
   beforeEach(() => {

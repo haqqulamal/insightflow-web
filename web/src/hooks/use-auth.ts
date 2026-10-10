@@ -16,15 +16,30 @@ const DEFAULT_DEMO_USER: AuthUser = {
   isDemo: true,
 };
 
+// Caching untuk getSnapshot useSyncExternalStore
+let cachedRaw: string | null | undefined = undefined;
+let cachedUser: AuthUser | null = null;
+
 function bacaUser(): AuthUser | null {
   try {
-    const raw = localStorage.getItem(AUTH_KEY);
-    if (raw) return JSON.parse(raw);
+    const raw = typeof window !== "undefined" ? localStorage.getItem(AUTH_KEY) : null;
+
+    // Jika string raw di localStorage tidak berubah, kembalikan objek referensi yang sama
+    if (raw === cachedRaw && cachedUser !== null) {
+      return cachedUser;
+    }
+
+    cachedRaw = raw;
+    if (raw) {
+      cachedUser = JSON.parse(raw);
+      return cachedUser;
+    }
   } catch {
     // data korup
   }
-  // Default terautentikasi sebagai pengguna demo jika belum pernah logout
-  return DEFAULT_DEMO_USER;
+
+  cachedUser = DEFAULT_DEMO_USER;
+  return cachedUser;
 }
 
 function tulisUser(user: AuthUser | null) {
@@ -39,15 +54,21 @@ function tulisUser(user: AuthUser | null) {
 const listeners = new Set<() => void>();
 
 function notify() {
+  // Reset cache saat ada mutasi lokal agar getSnapshot membaca ulang
+  cachedRaw = undefined;
   listeners.forEach((l) => l());
 }
 
 function subscribe(cb: () => void) {
   listeners.add(cb);
-  window.addEventListener("storage", cb);
+  const handleStorage = () => {
+    cachedRaw = undefined;
+    cb();
+  };
+  window.addEventListener("storage", handleStorage);
   return () => {
     listeners.delete(cb);
-    window.removeEventListener("storage", cb);
+    window.removeEventListener("storage", handleStorage);
   };
 }
 
