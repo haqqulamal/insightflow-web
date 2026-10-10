@@ -1,8 +1,15 @@
 "use client";
 
-import { Gauge, Menu, Search, UserCircle } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Gauge, LogOut, Menu, Search, UserCircle, LogIn } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export function AppHeader({ onMenu }: { onMenu?: () => void }) {
+  const router = useRouter();
+  const { user, isLoggedIn, logout } = useAuth();
+
   return (
     <header className="flex h-[var(--app-bar-h)] items-center gap-3 border-b border-border bg-white px-4">
       <button
@@ -32,13 +39,47 @@ export function AppHeader({ onMenu }: { onMenu?: () => void }) {
           <Gauge className="size-4" />
           Pemakaian
         </button>
-        <button
-          type="button"
-          aria-label="Profil pengguna"
-          className="rounded-full p-1 hover:bg-accent"
-        >
-          <UserCircle className="size-6 text-slate-ink" />
-        </button>
+
+        {isLoggedIn ? (
+          <Popover>
+            <PopoverTrigger className="flex items-center gap-2 rounded-full p-1 hover:bg-accent focus-visible:ring-2 focus-visible:ring-primary/40">
+              <UserCircle className="size-6 text-slate-ink" />
+              <span className="hidden text-xs font-medium text-navy sm:inline">
+                {user?.nama}
+              </span>
+            </PopoverTrigger>
+            <PopoverContent align="end" className="w-56 p-3 space-y-3">
+              <div className="border-b border-border pb-2">
+                <p className="text-xs font-medium text-navy">{user?.nama}</p>
+                <p className="text-[11px] truncate text-muted-foreground">{user?.email}</p>
+                {user?.isDemo && (
+                  <span className="mt-1 inline-block rounded-full bg-info/10 px-2 py-0.5 text-[10px] text-info font-medium">
+                    Mode Demo Frontend
+                  </span>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  logout();
+                  router.push("/masuk");
+                }}
+                className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-xs text-destructive hover:bg-destructive/10"
+              >
+                <LogOut className="size-3.5" />
+                Keluar
+              </button>
+            </PopoverContent>
+          </Popover>
+        ) : (
+          <Link
+            href="/masuk"
+            className="flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-white hover:bg-primary/90"
+          >
+            <LogIn className="size-3.5" />
+            Masuk
+          </Link>
+        )}
       </div>
     </header>
   );

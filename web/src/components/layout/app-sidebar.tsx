@@ -54,6 +54,18 @@ const navGroups: NavGroup[] = [
 export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
 
+  // Item dianggap aktif kalau cocok persis ATAU jadi induk dari rute sekarang
+  // dengan tidak ada item lain yang lebih spesifik juga cocok. Tanpa ini,
+  // "/app" ikut menyala saat pengguna berada di "/app/analis".
+  const cocok = navGroups
+    .flatMap((grup) => grup.items)
+    .filter(
+      (item) =>
+        pathname === item.href || pathname.startsWith(`${item.href}/`),
+    )
+    .sort((a, b) => b.href.length - a.href.length);
+  const hrefAktif = cocok[0]?.href;
+
   return (
     <aside className="flex h-full w-64 shrink-0 flex-col border-r border-border bg-surface md:w-16 lg:w-64">
       <div className="flex h-[var(--app-bar-h)] items-center justify-between gap-2 px-4 font-semibold text-navy md:justify-center lg:justify-start">
@@ -76,8 +88,7 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
               {grup.judul}
             </p>
             {grup.items.map((item) => {
-              const active =
-                pathname === item.href || pathname.startsWith(`${item.href}/`);
+              const active = item.href === hrefAktif;
               const Icon = item.icon;
               return (
                 <Link
